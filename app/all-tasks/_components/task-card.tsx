@@ -7,39 +7,66 @@ import {
 } from "@/components/ui/card";
 import { Calendar, CheckCheck, Clock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Task } from "@/types/task.types";
+import { getPriorityClasses } from "@/lib/utils";
+import { useUpdateTaskMutation } from "@/features/task/tasksApi";
+import toast from "react-hot-toast";
 
-const TaskCard = () => {
-  const isComplete = true;
-  const taskPriority: "HIGH" | "MEDIUM" | "LOW" = "HIGH";
+type TaskCardProps = {
+  task: Task;
+};
+
+const TaskCard = ({ task }: TaskCardProps) => {
+  const [updateTaskMutation] = useUpdateTaskMutation();
+  const isComplete = task?.status === "complete";
   const StatusIcon = isComplete ? CheckCheck : Clock;
 
   // Get class names for the priority
-  const { borderClass, textClass, bgClass, bgWithOpacity } =
-    getPriorityClasses(taskPriority);
+  const { borderClass, textClass, bgClass, bgWithOpacity } = getPriorityClasses(
+    task?.priority
+  );
+
+  const handleCompleteTask = async (checked: boolean) => {
+    try {
+      await updateTaskMutation({
+        id: task.id,
+        status: checked ? "complete" : "pending",
+      }).unwrap();
+      const toastMethod = checked ? toast["success"] : toast;
+      toastMethod(`Task marked as ${checked ? "completed" : "pending"}`);
+    } catch (error) {
+      console.log(
+        "✨ ~ file: task-card.tsx:38 ~ handleCompleteTask ~ error:",
+        error
+      );
+      toast.error("Failed to update task status");
+    }
+  };
 
   return (
     <Card className="px-4 py-2 w-full">
       <CardHeader className="p-0">
         <CardTitle className="flex justify-start gap-2 items-center">
-          <Checkbox />
+          <Checkbox checked={isComplete} onCheckedChange={handleCompleteTask} />
           <p
             className={`text-lg font-medium ${
               isComplete ? "line-through text-zinc-600" : ""
             }`}
           >
-            Complete the frontend development task
+            {task?.name}
           </p>
         </CardTitle>
       </CardHeader>
       <CardDescription className="text-sm text-zinc-500 mb-2 flex justify-between items-center gap-4 mt-2">
         <div className="text-sm text-zinc-500 flex items-center gap-2">
-          <Calendar size={18} /> 11 Jan 2020
+          <Calendar size={18} />
+          {new Date(task?.createdAt).toDateString()}
           <div
             className={`px-1.5 py-0.5 border rounded-full flex items-center gap-2 ${bgWithOpacity} text-xs ${borderClass} ${textClass}`}
           >
-            <div className={`h-2 w-2 rounded-full ${bgClass}`} />
-            {taskPriority.charAt(0).toUpperCase() +
-              taskPriority.slice(1).toLocaleLowerCase()}
+            <div className={`h-2 w-2 rounded-full ${bgClass} `} />
+            {task?.priority.charAt(0).toUpperCase() +
+              task?.priority.slice(1).toLocaleLowerCase()}
           </div>
         </div>
         <div
@@ -61,37 +88,5 @@ const TaskCard = () => {
 };
 
 // Function to return priority classes
-const getPriorityClasses = (priority: "HIGH" | "MEDIUM" | "LOW") => {
-  switch (priority) {
-    case "HIGH":
-      return {
-        borderClass: "border-primary/75",
-        bgWithOpacity: "bg-primary/10",
-        textClass: "text-primary",
-        bgClass: "bg-primary",
-      };
-    case "MEDIUM":
-      return {
-        borderClass: "border-indigo-500/75",
-        bgWithOpacity: "bg-indigo-500/10",
-        textClass: "text-indigo-500",
-        bgClass: "bg-indigo-500",
-      };
-    case "LOW":
-      return {
-        borderClass: "border-orange-500/75",
-        textClass: "text-orange-500",
-        bgWithOpacity: "bg-orange-500/10",
-        bgClass: "bg-orange-500",
-      };
-    default:
-      return {
-        borderClass: "border-gray-300",
-        textClass: "text-gray-500",
-        bgWithOpacity: "bg-gray-500/10",
-        bgClass: "bg-gray-300",
-      };
-  }
-};
 
 export default TaskCard;

@@ -3,10 +3,11 @@
 import React from "react";
 import TaskCard from "./_components/task-card";
 import { Button } from "@/components/ui/button";
-import { FilterIcon, PlusIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { TaskFilterBtn } from "./_components/task-filter-btn";
 import { useGetAllTasksQuery } from "@/features/task/tasksApi";
+import { TaskModal } from "./_components/task-modal";
 
 export default function AllTasks() {
   const { data: tasks = [] } = useGetAllTasksQuery();
@@ -21,10 +22,7 @@ export default function AllTasks() {
           />
 
           <div className="flex justify-start gap-2.5">
-            <Button variant="default" className="text-white bg-primary">
-              <PlusIcon />
-              <span>Add Task</span>
-            </Button>
+            <TaskModal />
             <Button variant="secondary" className="text-[#0055FF]">
               <FilterIcon />
               <span>Filters</span>
@@ -32,9 +30,9 @@ export default function AllTasks() {
             <TaskFilterBtn />
           </div>
           <div className="flex justify-center items-center gap-4 flex-col  mt-6 ">
-            <TaskCard />
-            <TaskCard />
-            <TaskCard />
+            {tasks.map((task) => (
+              <TaskCard task={task} key={task?.id} />
+            ))}
           </div>
         </div>
       </div>
