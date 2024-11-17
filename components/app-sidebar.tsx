@@ -1,8 +1,9 @@
-import * as React from "react"
-import { GalleryVerticalEnd } from "lucide-react"
+"use client";
 
-import { NavMain } from "@/components/nav-main"
-import { SidebarOptInForm } from "@/components/sidebar-opt-in-form"
+import * as React from "react";
+import { LayoutDashboard, ListChecks } from "lucide-react";
+
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -11,169 +12,77 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import { NavMainMenu } from "./nav-main-menu";
+import Link from "next/link";
 
-// This is sample data.
 const data = {
-  navMain: [
+  user: {
+    name: "Ashikur Rahman",
+    email: "meashik1000@gmail.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  mainMenu: [
     {
-      title: "Getting Started",
-      url: "#",
-      items: [
-        {
-          title: "Installation",
-          url: "#",
-        },
-        {
-          title: "Project Structure",
-          url: "#",
-        },
-      ],
+      name: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboard,
     },
     {
-      title: "Building Your Application",
-      url: "#",
-      items: [
-        {
-          title: "Routing",
-          url: "#",
-        },
-        {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "API Reference",
-      url: "#",
-      items: [
-        {
-          title: "Components",
-          url: "#",
-        },
-        {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
-        },
-      ],
+      name: "All Tasks",
+      url: "/all-tasks",
+      icon: ListChecks,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar {...props}>
+    <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4" />
+              <Link href="/">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-100  text-sidebar-primary-foreground">
+                  <svg
+                    id="logo-35"
+                    width="50"
+                    height="39"
+                    viewBox="0 0 50 39"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {" "}
+                    <path
+                      d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z"
+                      className="ccompli1"
+                      fill="#007AFF"
+                    ></path>{" "}
+                    <path
+                      d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z"
+                      className="ccustom"
+                      fill="#312ECB"
+                    ></path>{" "}
+                  </svg>
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Documentation</span>
-                  <span className="">v1.0.0</span>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Flow Mate</span>
+                  <span className="truncate text-xs">
+                    Effortless Task Management
+                  </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMainMenu menus={data.mainMenu} />
       </SidebarContent>
       <SidebarFooter>
-        <div className="p-1">
-          <SidebarOptInForm />
-        </div>
+        <NavUser user={data.user} />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
-  )
+  );
 }
