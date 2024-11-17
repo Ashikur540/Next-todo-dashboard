@@ -55,7 +55,7 @@ export const tasksApi = createApi({
         const tasks = getTasksFromLocalStorage();
         const filteredTasks = tasks.filter((task: Task) => task.id !== id);
         saveTaskToLocalStorage(filteredTasks);
-        return { data: undefined };
+        return { data: undefined, error: false };
       },
       invalidatesTags: ["Tasks"],
     }),

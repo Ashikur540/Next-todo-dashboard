@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, SquarePen } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -22,7 +22,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { taskFormSchema } from "@/schemas/taskSchema";
-import { useAddTaskMutation } from "@/features/task/tasksApi";
+import {
+  useAddTaskMutation,
+  useUpdateTaskMutation,
+} from "@/features/task/tasksApi";
 import {
   Select,
   SelectContent,
@@ -31,45 +34,86 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useModal } from "@/hooks/use-modal";
+import { Task } from "@/types/task.types";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
-export function TaskModal() {
+type TaskModalProps = {
+  task?: Task;
+  onMenuClose?: () => void;
+};
+
+export function TaskModal({ task, onMenuClose }: TaskModalProps) {
+  const editMode = task?.id ? true : false;
+  // console.log("✨ ~ file: task-modal.tsx:42 ~ TaskModal ~ editMode:", editMode);
   const [addTaskMutation] = useAddTaskMutation();
-  const [isOpen, setIsOpen] = useState(false);
+  const [updateTaskMutation] = useUpdateTaskMutation();
+  const { isModalOpen, handleOpenModal, handleToggleModal } = useModal();
 
   const form = useForm<z.infer<typeof taskFormSchema>>({
     resolver: zodResolver(taskFormSchema),
-    defaultValues: {
-      name: "",
-      priority: "medium",
-    },
+    defaultValues: editMode
+      ? task
+      : {
+          name: "",
+          priority: "medium",
+        },
   });
 
   async function onSubmit(values: z.infer<typeof taskFormSchema>) {
     console.log("✨ ~ file: task-modal.tsx:47 ~ onSubmit ~ values:", values);
+    let updatedTask;
     try {
-      await addTaskMutation(values).unwrap();
-
-      toast.success("Task created successfully");
+      if (editMode) {
+        updatedTask = await updateTaskMutation({
+          id: String(task?.id),
+          ...values,
+        }).unwrap();
+      } else {
+        await addTaskMutation(values);
+      }
+      const toastMsg = updatedTask?.id
+        ? `Task Modified`
+        : `Task created successfully`;
+      toast.success(toastMsg);
 
       form.reset();
-      setIsOpen(false);
+      handleToggleModal(false);
+      onMenuClose?.(); // menu closes
     } catch (error) {
       console.log("✨ onSubmit ~ error:", error);
       toast.error("Error creating task. Try again!");
     }
   }
   return (
-    <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
+    <Dialog
+      open={isModalOpen}
+      onOpenChange={(v) => {
+        handleToggleModal(v);
+        onMenuClose?.(); // cross button click menu closes too
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant="default" className="text-white bg-primary">
-          <PlusIcon />
-          <span>Add Task</span>
-        </Button>
+        {editMode ? (
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault();
+              handleOpenModal();
+            }}
+          >
+            <SquarePen />
+            Edit
+          </DropdownMenuItem>
+        ) : (
+          <Button variant="default" className="text-white bg-primary">
+            <PlusIcon />
+            <span>Add Task</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Add task</DialogTitle>
+          <DialogTitle>{editMode ? "Edit task" : "Add task"}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -117,7 +161,9 @@ export function TaskModal() {
               )}
             />
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit">
+                {editMode ? "Save changes" : "Add new task"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

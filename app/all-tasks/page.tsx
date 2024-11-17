@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { TaskFilterBtn } from "./_components/task-filter-btn";
 import { useGetAllTasksQuery } from "@/features/task/tasksApi";
 import { TaskModal } from "./_components/task-modal";
+import { useModal } from "@/hooks/use-modal";
 
 export default function AllTasks() {
   const { data: tasks = [] } = useGetAllTasksQuery();

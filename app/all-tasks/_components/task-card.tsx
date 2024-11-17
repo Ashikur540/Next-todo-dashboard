@@ -11,6 +11,7 @@ import { Task } from "@/types/task.types";
 import { getPriorityClasses } from "@/lib/utils";
 import { useUpdateTaskMutation } from "@/features/task/tasksApi";
 import toast from "react-hot-toast";
+import TaskOptionMenu from "./task-option-menu";
 
 type TaskCardProps = {
   task: Task;
@@ -44,17 +45,24 @@ const TaskCard = ({ task }: TaskCardProps) => {
   };
 
   return (
-    <Card className="px-4 py-2 w-full">
+    <Card className="px-4 py-2 w-full group cursor-pointer">
       <CardHeader className="p-0">
         <CardTitle className="flex justify-start gap-2 items-center">
           <Checkbox checked={isComplete} onCheckedChange={handleCompleteTask} />
-          <p
-            className={`text-lg font-medium ${
-              isComplete ? "line-through text-zinc-600" : ""
-            }`}
-          >
-            {task?.name}
-          </p>
+          <div className="flex justify-between gap-4 items-start w-full">
+            <p
+              className={`text-lg font-medium ${
+                isComplete ? "line-through text-zinc-600" : ""
+              }`}
+            >
+              {task?.name}
+            </p>
+
+            <TaskOptionMenu
+              task={task}
+              className="group-hover:opacity-100 opacity-0 transition-opacity duration-200"
+            />
+          </div>
         </CardTitle>
       </CardHeader>
       <CardDescription className="text-sm text-zinc-500 mb-2 flex justify-between items-center gap-4 mt-2">
