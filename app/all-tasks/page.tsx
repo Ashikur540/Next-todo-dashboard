@@ -1,10 +1,16 @@
+"use client";
+
 import React from "react";
 import TaskCard from "./_components/task-card";
 import { Button } from "@/components/ui/button";
 import { FilterIcon, PlusIcon } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
+import { TaskFilterBtn } from "./_components/task-filter-btn";
+import { useGetAllTasksQuery } from "@/features/task/tasksApi";
 
 export default function AllTasks() {
+  const { data: tasks = [] } = useGetAllTasksQuery();
+  console.log("✨ ~ file: page.tsx:11 ~ AllTasks ~ tasks:", tasks);
   return (
     <section>
       <div className="container mx-auto px-4">
@@ -23,6 +29,7 @@ export default function AllTasks() {
               <FilterIcon />
               <span>Filters</span>
             </Button>
+            <TaskFilterBtn />
           </div>
           <div className="flex justify-center items-center gap-4 flex-col  mt-6 ">
             <TaskCard />

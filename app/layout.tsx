@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import QueryProviders from "./providers";
+
 import { Mona_Sans } from "next/font/google";
 import DashboardLayout from "./dashboard/_components/_DashboardLayout";
+import ReduxProvider from "./providers";
 
 const monaSans = Mona_Sans({
   subsets: ["latin"],
@@ -25,9 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${monaSans.variable} ${monaSans.variable} antialiased`}>
-        <QueryProviders>
+        <ReduxProvider>
           <DashboardLayout>{children}</DashboardLayout>
-        </QueryProviders>
+        </ReduxProvider>
       </body>
     </html>
   );
