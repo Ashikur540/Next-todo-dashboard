@@ -13,10 +13,6 @@ import { usePathname } from "next/navigation";
 export const TopNavbar = () => {
   const pathname = usePathname();
   const pathParts = pathname.split("/").filter((part) => part !== "");
-  console.log(
-    "✨ ~ file: app-dashboard-top-nav.tsx:16 ~ TopNavbar ~ pathParts:",
-    pathParts
-  );
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
