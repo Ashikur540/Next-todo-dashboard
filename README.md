@@ -26,7 +26,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### `❄ Inject Fake todos for test`
+### `❄ Inject Fake todos for testing`
 
 You can test the dashboard by injecting tasks. Run below code on browser inspect panel:
 
