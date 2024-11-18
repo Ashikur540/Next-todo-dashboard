@@ -8,9 +8,10 @@ import { PageHeader } from "@/components/ui/page-header";
 import { TaskFilterBtn } from "./_components/task-filter-btn";
 import { useGetAllTasksQuery } from "@/features/task/tasksApi";
 import { TaskModal } from "./_components/task-modal";
+import { TaskCardSkeleton } from "./_components/task-card-skeleton";
 
 export default function AllTasks() {
-  const { data: tasks = [] } = useGetAllTasksQuery();
+  const { data: tasks = [], isLoading } = useGetAllTasksQuery();
   const form = useForm<{ selectedFilters: string[] }>({
     defaultValues: { selectedFilters: [] },
   });
@@ -42,9 +43,19 @@ export default function AllTasks() {
             </FormProvider>
           </div>
           <div className="flex justify-center items-center gap-4 flex-col  mt-6 ">
-            {filteredTasks.map((task) => (
-              <TaskCard task={task} key={task?.id} />
-            ))}
+            {isLoading ? (
+              <>
+                {Array.from({ length: 8 })
+                  .fill(0)
+                  .map((_, index) => (
+                    <TaskCardSkeleton key={index} />
+                  ))}
+              </>
+            ) : (
+              filteredTasks?.map((task) => (
+                <TaskCard task={task} key={task?.id} />
+              ))
+            )}
           </div>
         </div>
       </div>
