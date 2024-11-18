@@ -21,7 +21,7 @@ You can test the dashboard by injecting tasks. Run below code on browser inspect
 ```
 function generateTasks() {
   const priorities = ["low", "medium", "high"];
-  const statuses = ["pending", "completed"];
+  const statuses = ["pending", "complete"];
   const tasks = [];
 
   for (let i = 0; i < 16; i++) {
