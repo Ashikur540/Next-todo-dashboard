@@ -100,6 +100,7 @@ export function TaskModal({ task, onMenuClose }: TaskModalProps) {
               e.preventDefault();
               handleOpenModal();
             }}
+            className="hover:text-primary cursor-pointer "
           >
             <SquarePen />
             Edit
