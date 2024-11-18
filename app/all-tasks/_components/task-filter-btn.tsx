@@ -21,15 +21,17 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
+import { priorityOptions } from "./task-modal";
 
 export function TaskFilterBtn() {
-  const selectedValues = new Set(["LOW"]);
-  const options = [
-    { label: "Low", value: "LOW" },
-    { label: "Medium", value: "MEDIUM" },
-    { label: "High", value: "HIGH" },
-  ];
-  const form = useForm<string[]>({});
+  const form = useForm<{ selectedFilters: string[] }>({
+    defaultValues: { selectedFilters: [] },
+  });
+  const selectedValues = new Set(form.watch("selectedFilters"));
+  console.log(
+    "✨ ~ file: task-filter-btn.tsx:31 ~ TaskFilterBtn ~ selectedValues:",
+    selectedValues
+  );
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -54,7 +56,7 @@ export function TaskFilterBtn() {
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
-                  options
+                  priorityOptions
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
@@ -73,11 +75,11 @@ export function TaskFilterBtn() {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-2 " align="start">
         <Form {...form}>
-          {options.map((item, id) => (
+          {priorityOptions.map((item, id) => (
             <FormField
               key={id}
               control={form.control}
-              name={item.label}
+              name={"selectedFilters"}
               render={({ field }) => {
                 return (
                   <FormItem
