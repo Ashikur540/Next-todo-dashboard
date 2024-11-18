@@ -1,18 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+
 import TaskCard from "./_components/task-card";
-import { Button } from "@/components/ui/button";
-import { FilterIcon } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { TaskFilterBtn } from "./_components/task-filter-btn";
 import { useGetAllTasksQuery } from "@/features/task/tasksApi";
 import { TaskModal } from "./_components/task-modal";
-import { useModal } from "@/hooks/use-modal";
 
 export default function AllTasks() {
   const { data: tasks = [] } = useGetAllTasksQuery();
-  console.log("✨ ~ file: page.tsx:11 ~ AllTasks ~ tasks:", tasks);
+  const form = useForm<{ selectedFilters: string[] }>({
+    defaultValues: { selectedFilters: [] },
+  });
+  const selectedFilters = form.watch("selectedFilters");
+  const selectedValues = useMemo(
+    () => new Set(selectedFilters),
+    [selectedFilters]
+  );
+
+  // Filter tasks based on selected priorities
+  const filteredTasks = useMemo(() => {
+    if (selectedValues.size === 0) return tasks;
+    return tasks?.filter((task) => selectedValues.has(task.priority)) ?? [];
+  }, [tasks, selectedValues]);
+
   return (
     <section>
       <div className="container mx-auto px-4">
@@ -24,14 +37,12 @@ export default function AllTasks() {
 
           <div className="flex justify-start gap-2.5">
             <TaskModal />
-            <Button variant="secondary" className="text-[#0055FF]">
-              <FilterIcon />
-              <span>Filters</span>
-            </Button>
-            <TaskFilterBtn />
+            <FormProvider {...form}>
+              <TaskFilterBtn selectedValues={selectedValues} />
+            </FormProvider>
           </div>
           <div className="flex justify-center items-center gap-4 flex-col  mt-6 ">
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <TaskCard task={task} key={task?.id} />
             ))}
           </div>

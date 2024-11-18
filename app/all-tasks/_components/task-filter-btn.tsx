@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { FilterIcon } from "lucide-react";
+import { FilterIcon, X } from "lucide-react";
 
 import {
   Popover,
@@ -20,18 +20,16 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import { priorityOptions } from "./task-modal";
+import { useFormContext } from "react-hook-form";
 
-export function TaskFilterBtn() {
-  const form = useForm<{ selectedFilters: string[] }>({
-    defaultValues: { selectedFilters: [] },
-  });
-  const selectedValues = new Set(form.watch("selectedFilters"));
-  console.log(
-    "✨ ~ file: task-filter-btn.tsx:31 ~ TaskFilterBtn ~ selectedValues:",
-    selectedValues
-  );
+export function TaskFilterBtn({
+  selectedValues,
+}: {
+  selectedValues: Set<string>;
+}) {
+  const form = useFormContext();
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -107,26 +105,13 @@ export function TaskFilterBtn() {
             />
           ))}
         </Form>
-        {/* <div className="flex items-center space-x-2 px-1.5 py-2 rounded hover:bg-primary-foreground">
-          <Checkbox id="ee" />
-          <label
-            htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Medium
-          </label>
-        </div>
-        <div className="flex items-center space-x-2 px-1.5 py-2 rounded hover:bg-primary-foreground">
-          <Checkbox id="dd" />
-          <label
-            htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            High
-          </label>
-        </div> */}
-        {/* https://github.com/shadcn-ui/ui/blob/main/apps/www/app/(app)/examples/tasks/components/data-table-faceted-filter.tsx */}
       </PopoverContent>
+      {selectedValues.size > 0 && (
+        <Button variant="outline" onClick={() => form.reset()}>
+          <X />
+          Reset
+        </Button>
+      )}
     </Popover>
   );
 }
