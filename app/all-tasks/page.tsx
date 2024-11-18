@@ -9,6 +9,7 @@ import { TaskFilterBtn } from "./_components/task-filter-btn";
 import { useGetAllTasksQuery } from "@/features/task/tasksApi";
 import { TaskModal } from "./_components/task-modal";
 import { TaskCardSkeleton } from "./_components/task-card-skeleton";
+import EmptyTasksPlaceHolder from "./_components/empty-tasks-state";
 
 export default function AllTasks() {
   const { data: tasks = [], isLoading } = useGetAllTasksQuery();
@@ -36,12 +37,14 @@ export default function AllTasks() {
             title="All Tasks"
           />
 
-          <div className="flex justify-start gap-2.5">
-            <TaskModal />
-            <FormProvider {...form}>
-              <TaskFilterBtn selectedValues={selectedValues} />
-            </FormProvider>
-          </div>
+          {tasks?.length !== 0 && (
+            <div className="flex justify-start gap-2.5">
+              <TaskModal />
+              <FormProvider {...form}>
+                <TaskFilterBtn selectedValues={selectedValues} />
+              </FormProvider>
+            </div>
+          )}
           <div className="flex justify-center items-center gap-4 flex-col  mt-6 ">
             {isLoading ? (
               <>
@@ -51,6 +54,8 @@ export default function AllTasks() {
                     <TaskCardSkeleton key={index} />
                   ))}
               </>
+            ) : tasks?.length === 0 ? (
+              <EmptyTasksPlaceHolder />
             ) : (
               filteredTasks?.map((task) => (
                 <TaskCard task={task} key={task?.id} />
