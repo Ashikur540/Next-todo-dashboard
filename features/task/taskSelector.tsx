@@ -45,8 +45,15 @@ export const selectTaskGraphData = createSelector(
       taskDataByPriority.labels.push(key);
       taskDataByPriority.values.push(taskCountByPriority[key]);
     }
+
     return {
       taskDataByPriority,
+      tasksCountByPriority: {
+        low: allTasks?.filter((task) => task.priority === "low")?.length ?? 0,
+        medium:
+          allTasks?.filter((task) => task.priority === "medium")?.length ?? 0,
+        high: allTasks?.filter((task) => task.priority === "high")?.length ?? 0,
+      },
     };
   }
 );

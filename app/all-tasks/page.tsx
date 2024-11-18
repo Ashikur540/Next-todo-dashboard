@@ -33,7 +33,7 @@ export default function AllTasks() {
       <div className="container mx-auto px-4">
         <div className="max-w-screen-lg mx-auto">
           <PageHeader
-            desc="  Manage all your tasks here. You can search and filter tasks"
+            desc="Here you will see all your tasks, manage them and manage them"
             title="All Tasks"
           />
 

@@ -52,7 +52,7 @@ export const CircularChart = ({
       position: "bottom",
       fontSize: "15px",
       fontFamily: "inherit",
-      formatter(legendName, opts) {
+      formatter(legendName) {
         return legendName.charAt(0).toLocaleUpperCase() + legendName.slice(1);
       },
     },

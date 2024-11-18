@@ -20,15 +20,19 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-// import { useForm } from "react-hook-form";
+
 import { priorityOptions } from "./task-modal";
 import { useFormContext } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { selectTaskGraphData } from "@/features/task/taskSelector";
+import { Task } from "@/types/task.types";
 
 export function TaskFilterBtn({
   selectedValues,
 }: {
   selectedValues: Set<string>;
 }) {
+  const { tasksCountByPriority } = useSelector(selectTaskGraphData);
   const form = useFormContext();
   return (
     <Popover>
@@ -98,7 +102,12 @@ export function TaskFilterBtn({
                         }}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">{item.label}</FormLabel>
+                    <FormLabel className="font-normal flex justify-between items-center w-full">
+                      <p>{item.label}</p>
+                      <Badge variant="outline">
+                        {tasksCountByPriority[item.value as Task["priority"]]}
+                      </Badge>
+                    </FormLabel>
                   </FormItem>
                 );
               }}

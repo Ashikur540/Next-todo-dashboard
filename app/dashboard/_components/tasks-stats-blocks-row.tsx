@@ -3,10 +3,7 @@
 import React from "react";
 import { DashboardSmallMetricsBlock } from "./dashboard-small-metrics-block";
 import { useSelector } from "react-redux";
-import {
-  selectTaskGraphData,
-  selectTaskStats,
-} from "@/features/task/taskSelector";
+import { selectTaskStats } from "@/features/task/taskSelector";
 import { useGetAllTasksQuery } from "@/features/task/tasksApi";
 import { Skeleton } from "@/components/ui/skeleton";
 

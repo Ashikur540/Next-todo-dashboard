@@ -9,7 +9,7 @@ const monaSans = Mona_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-monaSans",
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  // weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
