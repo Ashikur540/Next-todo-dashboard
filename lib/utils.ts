@@ -19,37 +19,69 @@ export function saveTaskToLocalStorage(tasks: Task[]) {
   localStorage.setItem(localStorageName, JSON.stringify(tasks));
 }
 
-export function getPriorityClasses(priority: Task["priority"]) {
-  switch (priority) {
-    case "high":
-      return {
-        borderClass: "border-primary/75",
-        bgWithOpacity: "bg-primary/10",
-        textClass: "text-primary",
-        bgClass: "bg-primary",
-      };
-    case "medium":
-      return {
-        borderClass: "border-indigo-500/75",
-        bgWithOpacity: "bg-indigo-500/10",
-        textClass: "text-indigo-500",
-        bgClass: "bg-indigo-500",
-      };
-    case "low":
-      return {
-        borderClass: "border-orange-500/75",
-        textClass: "text-orange-500",
-        bgWithOpacity: "bg-orange-500/10",
-        bgClass: "bg-orange-500",
-      };
-    default:
-      return {
-        borderClass: "border-gray-300",
-        textClass: "text-gray-500",
-        bgWithOpacity: "bg-gray-500/10",
-        bgClass: "bg-gray-300",
-      };
-  }
+export function getPriorityStyles(priority: Task["priority"]) {
+  const styles = {
+    high: {
+      badge: {
+        border: "1px solid rgba(239, 68, 68, 0.75)",
+        backgroundColor: "rgba(239, 68, 68, 0.1)",
+        color: "rgb(239, 68, 68)",
+        padding: "2px 6px",
+        borderRadius: "9999px",
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "12px",
+      },
+      dot: {
+        height: "8px",
+        width: "8px",
+        borderRadius: "50%",
+        backgroundColor: "rgb(239, 68, 68)",
+        fontSize: "12px",
+      },
+    },
+    medium: {
+      badge: {
+        border: "1px solid rgba(245, 158, 11, 0.75)",
+        backgroundColor: "rgba(245, 158, 11, 0.1)",
+        color: "rgb(245, 158, 11)",
+        padding: "2px 6px",
+        borderRadius: "9999px",
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "12px",
+      },
+      dot: {
+        height: "8px",
+        width: "8px",
+        borderRadius: "50%",
+        backgroundColor: "rgb(245, 158, 11)",
+      },
+    },
+    low: {
+      badge: {
+        border: "1px solid rgba(59, 130, 246, 0.75)",
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        color: "rgb(59, 130, 246)",
+        padding: "2px 6px",
+        borderRadius: "9999px",
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "12px",
+      },
+      dot: {
+        height: "8px",
+        width: "8px",
+        borderRadius: "50%",
+        backgroundColor: "rgb(59, 130, 246)",
+      },
+    },
+  };
+
+  return styles[priority] || styles.low;
 }
 
 export function formatDate(date: Date) {

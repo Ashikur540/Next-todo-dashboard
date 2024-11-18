@@ -8,10 +8,11 @@ import {
 import { Calendar, CheckCheck, Clock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Task } from "@/types/task.types";
-import { getPriorityClasses } from "@/lib/utils";
+// import { cn, getPriorityClasses } from "@/lib/utils";
 import { useUpdateTaskMutation } from "@/features/task/tasksApi";
 import toast from "react-hot-toast";
 import TaskOptionMenu from "./task-option-menu";
+import { getPriorityStyles } from "@/lib/utils";
 
 type TaskCardProps = {
   task: Task;
@@ -23,9 +24,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
   const StatusIcon = isComplete ? CheckCheck : Clock;
 
   // Get class names for the priority
-  const { borderClass, textClass, bgClass, bgWithOpacity } = getPriorityClasses(
-    task?.priority
-  );
+  const { badge, dot } = getPriorityStyles(task?.priority);
 
   const handleCompleteTask = async (checked: boolean) => {
     try {
@@ -45,7 +44,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
   };
 
   return (
-    <Card className="px-4 py-2 w-full group cursor-pointer">
+    <Card className="px-4 py-2 w-full group cursor-pointer ">
       <CardHeader className="p-0">
         <CardTitle className="flex justify-start gap-2 items-center">
           <Checkbox checked={isComplete} onCheckedChange={handleCompleteTask} />
@@ -69,12 +68,10 @@ const TaskCard = ({ task }: TaskCardProps) => {
         <div className="text-sm text-zinc-500 flex items-center gap-2">
           <Calendar size={18} />
           {new Date(task?.createdAt).toDateString()}
-          <div
-            className={`px-1.5 py-0.5 border rounded-full flex items-center gap-2 ${bgWithOpacity} text-xs ${borderClass} ${textClass}`}
-          >
-            <div className={`h-2 w-2 rounded-full ${bgClass} `} />
+          <div style={badge}>
+            <span style={dot}></span>
             {task?.priority.charAt(0).toUpperCase() +
-              task?.priority.slice(1).toLocaleLowerCase()}
+              task?.priority.slice(1).toLowerCase()}
           </div>
         </div>
         <div
