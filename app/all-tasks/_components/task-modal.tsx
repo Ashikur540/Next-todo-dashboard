@@ -91,6 +91,7 @@ export function TaskModal({ task, onMenuClose }: TaskModalProps) {
       onOpenChange={(v) => {
         handleToggleModal(v);
         onMenuClose?.(); // cross button click menu closes too
+        form.reset();
       }}
     >
       <DialogTrigger asChild>
@@ -162,7 +163,7 @@ export function TaskModal({ task, onMenuClose }: TaskModalProps) {
               )}
             />
             <DialogFooter>
-              <Button type="submit">
+              <Button type="submit" disabled={!form.formState.isDirty}>
                 {editMode ? "Save changes" : "Add new task"}
               </Button>
             </DialogFooter>
