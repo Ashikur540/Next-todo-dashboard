@@ -1,3 +1,13 @@
+### `❄Tech Stack `
+
+<ul>
+<li>Next Js</li>
+<li>Typescript</li>
+<li>Tailwind CSS</li>
+<li>Shadcn UI Library</li>
+<li>react-hot-toast</li>
+</ul>
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -15,6 +25,8 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### `❄ Inject Fake todos for test`
 
 You can test the dashboard by injecting tasks. Run below code on browser inspect panel:
 
